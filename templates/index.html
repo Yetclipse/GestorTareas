@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
     <!-- CSS personalizado -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}?v=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}?v=2">
 
     <!-- Font Awesome -->
     <link rel="stylesheet"
@@ -46,7 +46,8 @@
                         <!-- Gracias a Jinja se puede introducir código Python en nuestro HTML y
                         Python se encarga de ejecutarlo e interpretarlo -->
                         {% for tarea in lista_de_tareas %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if tarea.hecho %}tarea_hecha{% endif %}">
+
                             <!-- Texto de la tarea -->
                             <span class="{% if tarea.hecha==true %} tarea_hecha {% endif %}"> 
                             {{tarea.contenido}} </span> 

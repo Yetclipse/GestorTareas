@@ -28,7 +28,7 @@ def eliminar(id):
 @app.route('/tarea-hecha/<id>') 
 def hecha(id): 
     tarea = db.session.query(Tarea).filter_by(id=int(id)).first() # Se obtiene la tarea que se busca 
-    tarea.hecha = not(tarea.hecha) # Guardamos en la variable booleana de la tarea, su contrario 
+    tarea.hecho = not(tarea.hecho) # Guardamos en la variable booleana de la tarea, su contrario 
     db.session.commit()  # Ejecutar la operación pendiente de la base de datos 
     return redirect(url_for('home'))  # Esto nos redirecciona a la función home()
 
