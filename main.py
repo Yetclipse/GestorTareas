@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import db
 from models import Tarea
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -12,9 +13,32 @@ def home():
 
 @app.route('/crear-tareas', methods=['POST'])
 def crear():
-    #La tarea es un objeto de la clase Tarea, 
-    #el contenido de la tarea se obtiene del formulario que se envía desde el index.html,
-    tarea = Tarea(contenido=request.form['contenido_tarea'], hecho=False)
+    contenido = request.form['contenido_tarea']
+    categoria = request.form.get('categoria')          # puede venir vacío
+    fecha_str = request.form.get('fecha_limite')     # viene "YYYY-MM-DD" o vacío
+    tarea = Tarea(contenido=contenido, hecho=False, categoria=categoria, fecha_limite=fecha_limite)
+    
+    # Convertir String de fecha a objeto date
+    fecha_limite = None 
+    if fecha_str:
+        try:
+            fecha_limite = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+        except ValueError:
+            # Si la fecha no es válida, la dejamos como None
+            fecha_limite = None
+    
+    tarea = Tarea(
+        contenido=contenido, 
+        hecho=False, 
+        categoria=categoria if categoria else None, 
+        fecha_limite=fecha_limite
+    )
+
+    # si vienen vacíos, los dejamos como None
+    categoria = categoria if categoria else None
+    fechas_limite = fecha_limite if fecha_limite else None
+    
+    tarea = Tarea(contenido=contenido, hecho=False, categoria=categoria, fecha_limite=fecha_limite)
     db.session.add(tarea)
     db.session.commit()
     return redirect(url_for('home'))

@@ -34,6 +34,9 @@
                             <div class="from-group">
                                 <input type="text" name="contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
 
+                                <input type="text" name="categoria" placeholder="Categoría (opcional)" class="form-control mt-2">
+
+                                <input type="date" name="fecha_limite" class="form-control mt-2">
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">
                                 Guardar
@@ -47,10 +50,18 @@
                         Python se encarga de ejecutarlo e interpretarlo -->
                         {% for tarea in lista_de_tareas %}
                         <li class="list-group-item d-flex justify-content-between align-items-center {% if tarea.hecho %}tarea_hecha{% endif %}">
-
                             <!-- Texto de la tarea -->
-                            <span class="{% if tarea.hecha==true %} tarea_hecha {% endif %}"> 
-                            {{tarea.contenido}} </span> 
+                            <span>
+                                {{ tarea.contenido }}
+
+                                {% if tarea.categoria or tarea.fecha_limite %}
+                                <small class="text-muted d-block"> <!-- Si la tarea tiene categoría o fecha límite, las mostramos debajo del contenido -->
+                                    {% if tarea.categoria %}{{ tarea.categoria }}{% endif %}
+                                    {% if tarea.categoria and tarea.fecha_limite %} · {% endif %}
+                                    {% if tarea.fecha_limite %}{{ tarea.fecha_limite }}{% endif %}
+                                </small>
+                                {% endif %}
+                            </span> 
                             <!-- Acciones a la derecha -->
                             <div class="d-flex align-items-center gap-2">
 
