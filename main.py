@@ -13,35 +13,24 @@ def home():
 
 @app.route('/crear-tareas', methods=['POST'])
 def crear():
-    contenido = request.form['contenido_tarea']
-    categoria = request.form.get('categoria')          # puede venir vacío
-    fecha_str = request.form.get('fecha_limite')     # viene "YYYY-MM-DD" o vacío
-    tarea = Tarea(contenido=contenido, hecho=False, categoria=categoria, fecha_limite=fecha_limite)
-    
-    # Convertir String de fecha a objeto date
-    fecha_limite = None 
-    if fecha_str:
-        try:
-            fecha_limite = datetime.strptime(fecha_str, '%Y-%m-%d').date()
-        except ValueError:
-            # Si la fecha no es válida, la dejamos como None
-            fecha_limite = None
-    
+    contenido = request.form.get("contenido_tarea")
+    categoria = request.form.get("categoria")  # puede ser None o ""
+    fecha_str = request.form.get("fecha_limite")  # "2026-02-19" o ""
+
+    fecha_limite = None
+    if fecha_str:  # si no está vacío
+        fecha_limite = datetime.strptime(fecha_str, "%Y-%m-%d").date()
+
     tarea = Tarea(
-        contenido=contenido, 
-        hecho=False, 
-        categoria=categoria if categoria else None, 
+        contenido=contenido,
+        hecho=False,
+        categoria=categoria if categoria else None,
         fecha_limite=fecha_limite
     )
 
-    # si vienen vacíos, los dejamos como None
-    categoria = categoria if categoria else None
-    fechas_limite = fecha_limite if fecha_limite else None
-    
-    tarea = Tarea(contenido=contenido, hecho=False, categoria=categoria, fecha_limite=fecha_limite)
     db.session.add(tarea)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for("home"))
 
 @app.route('/eliminar-tarea/<id>')
 def eliminar(id):
